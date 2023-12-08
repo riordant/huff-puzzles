@@ -9,5 +9,14 @@
 */
 
 #define macro MAIN() = takes(0) returns(0) {
-    
+    // put CALLVALUE into memory
+                // stack:
+    callvalue   // [callvalue]
+    0x0         // [0x0, callvalue]
+    mstore      // []
+
+    // return
+    0x20        // [32]
+    0x0         // [0,32]
+    return
 }

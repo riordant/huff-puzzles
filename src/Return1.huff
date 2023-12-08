@@ -7,5 +7,14 @@
 
 
 #define macro MAIN() = takes(0) returns(0) {
+    // store 1 in memory at offset 0x0
+              // stack:
+    0x01      // [1]
+    0x00      // [0,1]
+    mstore    // []
     
+    // return value 1
+    0x20      // [32]
+    0x00      // [0,32]
+    return    // []
 }

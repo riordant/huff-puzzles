@@ -5,9 +5,17 @@
  *
  *  When a user sends a transaction to a smart contract, they can include additional data, known as calldata, which the smart contract can use to execute its logic.
  *
- *  The task is to write within the `MAIN` macro below, huff code to get and return the length of this calldata, 
+ *  The task is to write within the `MAIN` macro below, huff code to get and return the length of this calldata.
 */
 
 #define macro MAIN() = takes(0) returns(0) {
-    
+    // get calldatasize into memory
+                 // stack:
+    calldatasize // [calldatasize]
+    0x0          // [0, calldatasize]
+    mstore       // []
+
+    0x20         // [32]
+    0x0          // [0, 32]
+    return       // []
 }

@@ -8,5 +8,17 @@
  */
 
 #define macro MAIN() = takes(0) returns(0) {
-   
+    // get balance of account
+            // stack:
+    caller  // [caller]
+    balance // [balance]
+
+    // put balance in memory
+    0x0     // [0, balance]
+    mstore  // []
+
+    // return
+    0x20    // [32]
+    0x0     // [0,32]
+    return  // []
 }

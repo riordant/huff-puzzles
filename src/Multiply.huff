@@ -9,9 +9,51 @@
  *  NOTICE: The contract should revert when an unrecognized function is called
  */
 
-#define function multiply(uint256, uint256) payable returns(uint256)
+#define function multiply(uint256, uint256) pure returns(uint256)
 
 
 #define macro MAIN() = takes(0) returns(0) {
+    // load the funcsig from calldata
+    0x0
+    calldataload
+    0xe0 
+    shr
+    __FUNC_SIG(multiply)
+    eq
+    multiply jumpi
+    0x00 0x00 revert
 
+    multiply:
+        // load the 2 uints from calldata
+                      // stack:
+        0x4           // [4]
+        calldataload  // [a]
+        dup1          // [a, a]
+        0x24          // [36, a, a]
+        calldataload  // [b, a, a]
+        dup1          // [b, b, a, a]
+        dup1          // [b, b, b, a, a]
+        swap3         // [a, b, b, b, a]
+
+        // get product
+        mul           // [product, b, b, a]
+        dup1          // [product, product, b, b, a]
+
+        // store product at mem address 0
+        0x0 mstore    // [product, b, b, a] 
+
+        // no overflow: b == 0 || product/b == a
+        swap1         // [b, product, b, a]
+        0x0           // [0, b, product, b, a]
+        eq            // [is_0, product, b, a]
+        success jumpi // [product, b, a]
+        div           // [result, a]
+        eq            // [is_valid]
+        success jumpi // []
+
+        // revert, success case not found
+        0x0 0x0 revert
+        
+        success:
+            0x20 0x0 return
 }

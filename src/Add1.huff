@@ -9,9 +9,38 @@
  *  NOTICE: The contract should revert when an unrecognized function is called
  */
 
-#define function add1(uint256) payable returns(uint256)
-
+#define function add1(uint256) pure returns(uint256)
 
 #define macro MAIN() = takes(0) returns(0) {
 
+    // load the funcsig from calldata
+                     // stack:
+    0x0              // [0]
+    calldataload     // [calldata, 0]
+    0xe0 shr         // [funcsig]
+    __FUNC_SIG(add1) // [add1funcsig, funcsig]
+    eq               // [is_eq]
+    add_1 jumpi      // []
+
+    0x0 0x0 revert
+
+    add_1:
+        // load the uint from calldata to stack
+                     // stack:
+                     // []
+        0x04         // [4]
+        calldataload // [value]
+        
+        // add 1 to it
+        0x01         // [1,value]
+        add          // [1+value]
+
+        // store in position 0
+        0x00         // [0, 1+value]
+        mstore       // []
+
+        // return
+        0x20         // [0x20]
+        0x0          // [0x0, 0x20]
+        return       // []
 }
