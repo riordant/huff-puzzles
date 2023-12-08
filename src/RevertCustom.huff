@@ -14,5 +14,11 @@
 #define error OnlyHuff()
 
 #define macro MAIN() = takes(0) returns(0) {
+    // store custom error in mem address 0
+    __ERROR(OnlyHuff)
+    0x0
+    mstore
     
+    // revert, returning memory containing error message
+    0x20 0x0 revert
 }

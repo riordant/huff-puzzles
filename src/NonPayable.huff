@@ -9,5 +9,11 @@
  */
 
 #define macro MAIN() = takes(0) returns(0) {
+    // jumps if callvalue is non-0
+    callvalue
+    failure jumpi
+    0x0 0x20 return
 
+    failure:
+        0x0 0x0 revert
 }
