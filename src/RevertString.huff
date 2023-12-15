@@ -13,5 +13,16 @@
 
 
 #define macro MAIN() = takes(0) returns(0) {
-    
+    // store string pointer
+    0x20 0x0 mstore
+    // store string length
+    0x9 0x20 mstore
+    // put 'Only Huff' string on stack
+    0x4f6e6c792048756666
+    // shl to line it up
+    0xb8 shl
+    // store in memory
+    0x40 mstore
+
+    0x60 0x0 revert
 }
