@@ -12,5 +12,30 @@
 
 
 #define macro MAIN() = takes(0) returns(0) {
+    // load func selector
+    0x0 calldataload 0xe0 shr
+    __FUNC_SIG(sumArray)
+    eq sumArray jumpi
+    0x0 0x0 revert
+
+    sumArray:
+                                 // stack:
+        0x4 calldataload 0x4 add // [pointer]
+        dup1                     // [pointer, pointer]
+        calldataload             // [length, pointer]
+        dup1                     // [length, length, pointer]
+        adder jump
+
+    adder:
+        0x0 eq end jumpi          // [length, pointer]
+        0x1 swap1 sub             // [length-1, pointer]
+        swap1 0x20 add            // [next_pointer, length-1]
+        dup1 calldataload         // [next_val, next_pointer, length-1]
+        0x0 mload add 0x0 mstore  // [next_pointer, length-1]
+        swap1 dup1                // [length-1, length-1, next_pointer]
+        adder jump
+
+    end:
+        0x20 0x0 return
 
 }
