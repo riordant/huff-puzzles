@@ -10,5 +10,33 @@
 #define function maxOfArray(uint256[]) payable returns(uint256)
 
 #define macro MAIN() = takes(0) returns(0) {
-   
+    // get func selector
+    0x0 calldataload 0xe0 shr
+    __FUNC_SIG(maxOfArray) maxOfArray jumpi
+    reverter
+
+    maxOfArray:
+        0x4 calldataload 0x4 add                   // [length_pointer]
+        dup1 calldataload 0x0 eq reverter jumpi    // [length_pointer]
+        dup1 calldataload dup1                     // [length, length, length_pointer]
+        comper jump 
+
+    comper:
+        0x0 eq end jumpi              // [length, pointer]
+        0x1 swap1 sub                 // [length-1, pointer]
+        swap1 0x20 add dup1           // [next_pointer, next_pointer, length-1]
+        calldataload                  // [next_value, next_pointer, length-1]
+        0x0 mload                     // [curr_value, next_value, next_pointer, length-1]
+        lt storer jumpi               // [next_pointer, length-1]
+        swap1 dup1 comper jump        // [length-1, length-1, next_pointer]
+
+    storer:
+        dup1 calldataload 0x0 mstore  // [next_pointer, length-1]
+        swap1 dup1 comper jump        // [length-1, length-1, next_pointer]
+
+    end:
+        0x20 0x0 return
+
+    reverter:
+        0x0 0x0 revert
 }

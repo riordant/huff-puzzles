@@ -15,6 +15,7 @@ contract MaxOfArrayTest is Test, NonMatchingSelectorHelper {
 
     function setUp() public {
         maxOfArray = MaxOfArray(HuffDeployer.config().deploy("MaxOfArray"));
+        console.log("MaxOfArray deployed at address: %s", address(maxOfArray));
     }
 
     function testMaxOfArray() external {
